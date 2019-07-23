@@ -1,0 +1,60 @@
+{% extends "transaction/base.html" %}
+{% load crispy_forms_tags %}
+{% block body %}
+
+<div class="card" style="width: 100%;">
+<div class="card-header">
+  <h4>Journal Voucher</h4>
+</div>
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+
+    <div class="input-group">
+      <div class="col-md-12">
+        <a role="button" href="{% url 'journal-voucher' %}" style="float:right;" class="btn btn-outline-secondary" name="button"><i class="fas fa-plus"></i> Add New</a>
+      </div>
+    </div>
+    <br>
+    <ul style="list-style-type:none;" class="messages">
+      {% if messages %}
+        {% for msg in messages %}
+          <li>
+            <div class="alert {{msg.level_tag}}">
+              {{msg.message}}
+            </div>
+          </li>
+        {% endfor %}
+      {% endif %}
+    </ul>
+    <br>
+    <div class="table table-responsive content-loader">
+      <table class="table table-bordered sort" id="dataTable">
+          <thead>
+              <tr>
+                  <th>Voucher No.</th>
+                  <th width="300px">Transaction ID.</th>
+                  <th>Invoice No.</th>
+                  <th>Date</th>
+                  <th>From</th>
+                  <th width="600px">Action</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for value in all_vouchers %}
+                <tr>
+                    <td>{{ value.0 }}</td>
+                    <td>{{value.1}}</td>
+                    <td>{{value.2}}</td>
+                    <td>{{value.3}}</td>
+                    <td>{{value.6}}</td>
+                    <td><a class="edit_list" href="{% url 'edit-journal-voucher' pk=value.0%}" data-toggle=""><i class="material-icons">&#xE254;</i></a><a href="" target="_blank" data-toggle=""><i class="fa fa-print" id="print_icon" aria-hidden="true"></i></a><a href="{% url 'delete-journal-voucher' pk=value.0%}" class="delete_purchase"  data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>
+                </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+    </div>
+  </li>
+</ul>
+</div>
+
+{% endblock body %}

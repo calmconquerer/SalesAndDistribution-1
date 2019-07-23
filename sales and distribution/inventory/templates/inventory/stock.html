@@ -1,0 +1,55 @@
+{% extends "transaction/base.html" %}
+{% load crispy_forms_tags %}
+{% block body %}
+<div class="card" style="width: 100%;">
+<div class="card-header">
+  <h4>Item Stock</h4>
+</div>
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <br>
+    <ul style="list-style-type:none;" class="messages">
+      {% if messages %}
+        {% for msg in messages %}
+          <li>
+            <div class="alert {{msg.level_tag}}">
+              {{msg.message}}
+            </div>
+          </li>
+        {% endfor %}
+      {% endif %}
+    </ul>
+    <br>
+    <div class="table table-responsive">
+
+    </div>
+    <table class="table table-bordered sort" id="dataTable">
+        <thead>
+            <tr>
+                <th >Item Code</th>
+                <th>Item Name</th>
+                <th width="160px">Item Description</th>
+                <th width="160px">Inventory Stock</th>
+                <th width="160px">Unit</th>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+          {% for value in stock %}
+          <tr>
+              <td>{{ value.2 }}</td>
+              <td>{{ value.3 }}</td>
+              <td><pre>{{ value.4 }}</pre></td>
+              <td>{{ value.6 }}</td>
+              <td>{{ value.5 }}</td>
+  			      <td><a class="edit_list" href="{% url 'edit-item' pk=value.0 %}" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a><a class="delete_item_row" href="{% url 'delete-item' pk=value.0 %}" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+  </li>
+</ul>
+</div>
+
+
+{% endblock body %}

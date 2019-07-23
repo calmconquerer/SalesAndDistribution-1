@@ -1,0 +1,146 @@
+{% extends "transaction/base.html" %}
+{% load crispy_forms_tags %}
+{% load mathfilters %}
+{% block body %}
+
+<div class="card" style="width: 100%;">
+<div class="card-header">
+  <h4>Edit Sale</h4>
+</div>
+<ul class="list-group list-group-flush">
+<form  action="" id="edit-sale-submit" autocomplete="off" method="post">
+  {% csrf_token %}
+  <li class="list-group-item">
+      <div class="form-row">
+        <div class="form-group col-md-2">
+          <label for="">Sale ID</label>
+          <input type="text" readonly class="form-control form-control-sm" required value="{{ sale_header.sale_no }}" id="sale_id">
+        </div>
+        <div class="form-group col-md-2">
+          <label>Customer Name</label>
+          <input list="account" id="customer_name_sale" class="form-control form-control-sm" value="{{ sale_header.account_id.account_title }}" required >
+          <datalist id="account">
+            {% for value in all_accounts %}
+            <option value="{{value.account_title}}">{{value.account_title}}</option>
+            {% endfor %}
+        </datalist>
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">Account Holder</label>
+          <input type="text" class="form-control form-control-sm" value="{{ sale_header.account_holder }}" id="account_holder">
+        </div>
+        <div class="form-group col-md-2">
+         <label for="sel1">Payment Term:</label>
+         <select class="form-control form-control-sm" id="payment_method">
+           <option selected>{{sale_header.payment_method}}</option>
+           {% if sale_header.payment_method == "Cash" %}
+              <option>Credit</option>
+           {% else %}
+              <option>Cash</option>
+           {% endif %}
+         </select>
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">Credit Days</label>
+          <select class="form-control form-control-sm" id="credit_days">
+            <option value="{{sale_header.credit_days}}" selected="selected">{{sale_header.credit_days}}</option>
+            <option value="30">30</option>
+            <option value="60">60</option>
+            <option value="90">90</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlTextarea2">Footer Description</label>
+          <textarea class="form-control form-control-sm" rows="3" id="footer_desc">{{ sale_header.footer_description }}</textarea>
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item">
+    <div class="table-title">
+        <div class="row">
+            <div class="form-group col-md-3">
+              <input type="text" list="dc" placeholder="Enter Job No here..." class="form-control form-control-sm" id="job_no_sale">
+            </div>
+            <datalist id="dc">
+              {% for value in job_no %}
+              <option value="{{value.job_no}}">{{value.job_no}} | {{value.account_id.account_title}} | {{value.file_name}} </option>
+              {% endfor %}
+            </datalist>
+              <div style="margin-left:20px;">
+                  <button type="button" class="btn btn-info add-item-sale-edit has_id" id="{{sale_header.id}}"><i class="fa fa-plus"></i>Insert Job Order</button>
+              </div>
+        </div>
+    </div>
+    <div class="table table-responsive">
+      <table class="table table-bordered" id="edit-sale-table">
+          <thead>
+              <tr>
+                  <th width="40px" style="font-size:10px;">S No.</th>
+                  <th width="100px">Item Code</th>
+                  <th width="70px">Item Name</th>
+                  <th width="70px">Description</th>
+                  <th width="60px">Unit</th>
+                  <th width="70px">Width</th>
+                  <th width="90px">Height</th>
+                  <th width="60px">Qty</th>
+                  <th width="90px">Sq.ft</th>
+                  <th width="90px">Rate</th>
+                  <th width="110px">Amount</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for value in sale_detail %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{value.item_id.item_code}}</td>
+                <td>{{value.item_id.item_name}}</td>
+                <td><pre>{{value.item_id.item_description}}</pre></td>
+                <td id="quantity_edit"> {{value.item_id.unit}} </td>
+                <td id="width">{{value.width}}</td>
+                <td id="height">{{value.height}}</td>
+                <td id="quantity">{{value.quantity}}</td>
+                {% if value.meas == "sq.ft" %}
+                  <td id="sqft">{{value.width|mul:value.height|mul:value.quantity|floatformat:2}}</td>
+                  <td id="rate">{{value.rate}}</td>
+                  <td id="total" class="sum"><b>{{value.width|mul:value.height|mul:value.quantity|mul:value.rate|floatformat:2}}</b></td>
+                {% else %}
+                  <td id="sqft">{{value.width|mul:value.height|div:144|mul:value.quantity|floatformat:2}}</td>
+                  <td id="rate">{{value.rate}}</td>
+                  <td id="total" class="sum"><b>{{value.width|mul:value.height|div:144|mul:value.quantity|mul:value.rate|floatformat:2}}</b></td>
+                {% endif %}
+                <td style="display:none;">{{value.meas}}</td>
+                <td><a class="add-transaction-sale-edit" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a><a class="edit-transaction-sale-edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a><a class="delete-transaction-sale-edit" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+    </div>
+    </li>
+    <li class="list-group-item">
+      <input type="hidden" name="" value="" id="hidden">
+      <div class="float-right">
+        <div class="form-inline">
+          <div class="form-group">
+            <label for="text" style="font-size:14px;"><b>Grand Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></label>
+            <input type="text"  class="form-control form-control-sm" style="border-top: 0px; border-right:0px; border-left:0px;" id="grand_total" readonly value="0">
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      </li>
+      <br>
+    <div class="text-center">
+      <button type="submit" class="btn btn-outline-primary has_id" id="{{pk}}">Update <small>(Sale)</small></button>
+    </div>
+    <br>
+</form>
+</ul>
+</div>
+
+
+{% endblock body %}

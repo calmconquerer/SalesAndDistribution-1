@@ -1,0 +1,107 @@
+{% extends "transaction/base.html" %}
+{% load crispy_forms_tags %}
+{% load mathfilters %}
+{% block body %}
+
+<div class="card" style="width: 100%;">
+<div class="card-header">
+  <h4>Edit Job Order</h4>
+</div>
+<ul class="list-group list-group-flush">
+<form  action="" id="edit-jo-submit" autocomplete="off" method="post">
+  {% csrf_token %}
+  <li class="list-group-item">
+      <div class="form-row">
+        <div class="form-group col-md-2">
+          <label for="">Job No</label>
+          <input type="text" readonly class="form-control form-control-sm " required value="{{job_header.job_no}}" id="job_no">
+        </div>
+        <div class="form-group col-md-2">
+          <label>Customer Name</label>
+          <input list="account" class="form-control form-control-sm" value="{{job_header.account_id.account_title}}" required  id="client_name">
+          <datalist id="account">
+            {% for value in all_accounts %}
+            <option value="{{value.account_title}}">{{value.account_title}}</option>
+            {% endfor %}
+        </datalist>
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">File Name</label>
+          <input type="text" class="form-control form-control-sm"  value="{{job_header.file_name}}" id="file_name">
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">Deliver Date</label>
+          <input type="date" class="form-control form-control-sm" id="delivery_date"  value="{{job_header.delivery_date|date:"Y-m-d"}}" >
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">Remarks</label>
+          <textarea name="remarks" class="form-control form-control-sm" name="remarks" style="width:300px; height:30px;">{{job_header.remarks}}</textarea>
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item">
+    <div class="table-title">
+        <div class="row">
+          <div class="form-group col-md-3">
+            <input type="text" list="item" placeholder="Enter Item Code here..." class="form-control form-control-sm" id="item_code_jo_edit">
+          </div>
+          <datalist id="item">
+            {% for value in all_item_code %}
+            <option value="{{value.item_code}}">{{value.item_code}} | {{value.item_name}} | {{value.item_description}} </option>
+            {% endfor %}
+          </datalist>
+            <div style="margin-left:20px;">
+                <button type="button" class="btn btn-info edit-item-jo has_id" id="{{pk}}" ><i class="fa fa-plus"></i>Insert Item</button>
+            </div>
+        </div>
+    </div>
+    <div class="table table-responsive">
+      <table class="table table-bordered" id="edit-jo-table">
+          <thead>
+              <tr>
+                  <th width="40px" style="font-size:10px;">S No.</th>
+                  <th width="100px">Item Code</th>
+                  <th width="120px">Item Name</th>
+                  <th width="150px">Description</th>
+                  <th width="120px">Meas</th>
+                  <th width="80px">Width</th>
+                  <th width="80px">Height</th>
+                  <th width="80px">Qty</th>
+                  <th width="120px">Sq.ft</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for value in job_detail %}
+            <tr>
+              <td>{{forloop.counter}}</td>
+              <td style="display:none;">{{value.item_id.id}}</td>
+              <td>{{value.item_id.item_code}}</td>
+              <td>{{value.item_id.item_name}}</td>
+              <td><pre>{{value.item_id.item_description}}</pre></td>
+              <td><select id="sel" class="form-control" style=" height:35px;"><option>{{value.meas}}</option><option>sq.ft</option><option>sq.inches</option></select></td>
+              <td id="width">{{value.width}}</td>
+              <td id="height">{{value.height}}</td>
+              <td id="quantity">{{value.quantity}}</td>
+              {% if value.meas == "sq.ft" %}
+              <td id="square_fit">{{value.height|mul:value.width|mul:value.quantity|floatformat:2}}</td>
+              {% else %}
+              <td id="square_fit">{{value.height|mul:value.width|div:144|mul:value.quantity|floatformat:2}}</td>
+              {% endif %}
+              <td id="measurment" style="display:none;">{{value.meas}}</td>
+              <td><a class="add-jo-edit" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a><a class="edit-jo-edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a><a class="delete-jo-edit" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+    </div>
+    </li>
+      <br>
+    <div class="text-center">
+      <button type="submit" class="btn btn-outline-primary has_id" id="{{pk}}">Update <small>(Job Order)</small></button>
+    </div>
+    <br>
+</form>
+</ul>
+</div>
+{% endblock body %}

@@ -1,0 +1,56 @@
+{% extends "transaction/base.html" %}
+{% load crispy_forms_tags %}
+{% block body %}
+
+<div class="card" style="width: 100%;">
+<div class="card-header">
+  <h4>Bank Receiving Voucher</h4>
+</div>
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+
+    <div class="input-group">
+      <input type="text" class="form-control col-md-4" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+      <div class="col-md-8">
+        <a role="button" href="{% url 'new-bank-receiving' %}" style="float:right;" class="btn btn-outline-secondary" name="button"><i class="fas fa-plus"></i> Add New</a>
+      </div>
+    </div>
+    <br>
+    <div class="table table-responsive content-loader">
+      <table class="table table-bordered" id="dataTable">
+          <thead>
+              <tr>
+                  <th>Voucher No.</th>
+                  <th width="300px">Transaction ID.</th>
+                  <th>Invoice No.</th>
+                  <th>Date</th>
+                  <th>Cheque No.</th>
+                  <th>From</th>
+                  <th width="600px">Action</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for value in all_vouchers%}
+                <tr>
+                    <td>{{ value.0 }}</td>
+                    <td>{{value.1}}</td>
+                    <td>{{value.2}}</td>
+                    <td>{{value.3}}</td>
+                    <td>{{value.4}}</td>
+                    <td>{{value.6}}</td>
+                    <td><a class="edit_list" href="{% url 'edit-bank-receiving' pk=value.0 %}" data-toggle=""><i class="material-icons">&#xE254;</i></a><a class="return" href=""><i class="fas fa-undo"></i></a><a href="" target="_blank" data-toggle=""><i class="fa fa-print" id="print_icon" aria-hidden="true"></i></a><a class=""  data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>
+                </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+    </div>
+  </li>
+</ul>
+</div>
+
+{% endblock body %}

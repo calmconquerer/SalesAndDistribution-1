@@ -1,0 +1,60 @@
+{% extends "transaction/base.html" %}
+{% load crispy_forms_tags %}
+{% block body %}
+
+<div class="card" style="width: 100%;">
+<div class="card-header">
+  <h4>Job Orders</h4>
+</div>
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <div class="input-group">
+      <div class="col-md-12">
+        <a role="button" href="{% url 'new-job-order' %}" style="float:right;" class="btn btn-outline-secondary" name="button"><i class="fas fa-plus"></i> Add New</a>
+      </div>
+    </div>
+    <br>
+    <ul style="list-style-type:none;" class="messages">
+      {% if messages %}
+        {% for msg in messages %}
+          <li>
+            <div class="alert {{msg.level_tag}}">
+              {{msg.message}}
+            </div>
+          </li>
+        {% endfor %}
+      {% endif %}
+    </ul>
+    <br>
+    <div class="table table-responsive content-loader">
+      <table class="table table-bordered sort" id="dataTable">
+          <thead>
+              <tr>
+                  <th width="40px">S No.</th>
+                  <th width="100px">Job Id</th>
+                  <th width="100px">Customer Name</th>
+                  <th width="100px">File Name</th>
+                  <th width="100px">Delivery Date</th>
+                  <th >Created By</th>
+                  <th width="100px">Action</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for value in all_job_order %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{ value.job_no }}</td>
+                <td>{{ value.account_id.account_title }}</td>
+                <td>{{ value.file_name }}</td>
+                <td>{{ value.delivery_date }}</td>
+                <td>user1</td>
+                <td><a class="edit_list" href="{% url 'edit-job-order' pk=value.id %}" data-toggle=""><i class="material-icons">&#xE254;</i></a><a class="delete_purchase" href="{% url 'delete-job-order' pk=value.id %}"  data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+    </div>
+  </li>
+</ul>
+</div>
+{% endblock body %}

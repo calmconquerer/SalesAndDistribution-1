@@ -1,0 +1,55 @@
+{% extends "transaction/base.html" %}
+{% load crispy_forms_tags %}
+{% block body %}
+
+<div class="card" style="width: 100%;">
+<div class="card-header">
+  <h4>Edit Item</h4>
+</div>
+<ul class="list-group list-group-flush">
+<form id="edit-item-form" action="" method="post">
+  <li class="list-group-item">
+      {% csrf_token %}
+      <div class="form-row">
+        <div class="form-group col-md-1">
+          <label for="">Type</label>
+          <input type="text" class="form-control form-control-sm" readonly required value="{{all_detail.type}}" name="type">
+        </div>
+        <div class="form-group col-md-1">
+          <label for="">Size</label>
+          <input type="text" class="form-control form-control-sm" readonly value="{{all_detail.size}}" required name="size">
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">Item Name</label>
+          <input type="text" class="form-control form-control-sm" value="{{all_detail.item_name}}" required name="item_name">
+        </div>
+        <div class="form-group col-md-3">
+          <label for="">Item Description</label>
+          <textarea rows="" cols="25" name="item_desc" style="height:30px; width:255px;">{{all_detail.item_description}}</textarea>
+        </div>
+        <span>&nbsp;&nbsp;&nbsp;</span>
+        <div class="form-group col-md-2">
+          <label for="">Unit</label>
+          <select class="form-control form-control-sm" id="select_unit" value="{{all_detail.unit}}">
+            <option value="">{{all_detail.unit}}</option>
+            <option value="pcs">pcs</option>
+            <option value="meter">meter</option>
+            <option value="fit">Sq.fit</option>
+          </select>
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">Opening Stock</label>
+          <input type="text" class="form-control form-control-sm" name="opening_stock" value="{{all_detail.opening_stock}}">
+        </div>
+      </div>
+      <br>
+      <div class="text-center">
+        <button type="submit" class="btn btn-outline-primary has_id" id="{{pk}}">Submit <small>(Items)</small></button>
+      </div>
+</li>
+  </form>
+</ul>
+</div>
+
+
+{% endblock body %}

@@ -1,0 +1,88 @@
+{% extends "transaction/base.html" %}
+{% load crispy_forms_tags %}
+{% block body %}
+
+<div class="card" style="width: 100%;">
+<div class="card-header">
+  <h4>Job Order</h4>
+</div>
+<ul class="list-group list-group-flush">
+<form  action="" id="new-jo-submit" autocomplete="off" method="post">
+  {% csrf_token %}
+  <li class="list-group-item">
+      <div class="form-row">
+        <div class="form-group col-md-2">
+          <label for="">Job No</label>
+          <input type="text" readonly class="form-control form-control-sm" required value="{{get_job_no}}" id="job_no">
+        </div>
+        <div class="form-group col-md-2">
+          <label>Customer Name</label>
+          <input list="account" class="form-control form-control-sm" required  id="client_name">
+          <datalist id="account">
+            {% for value in all_accounts %}
+            <option value="{{value.account_title}}">{{value.account_title}}</option>
+            {% endfor %}
+        </datalist>
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">File Name</label>
+          <input type="text" class="form-control form-control-sm"  value="" id="file_name">
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">Deliver Date</label>
+          <input type="date" class="form-control form-control-sm"  value="" id="delivery_date">
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">Remarks</label>
+          <textarea name="name" class="form-control form-control-sm" id="remarks" style="width:300px; height:30px;"></textarea>
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item">
+    <div class="table-title">
+        <div class="row">
+          <div class="form-group col-md-3">
+            <input type="text" list="item" placeholder="Enter Item Code here..." class="form-control form-control-sm" id="item_code_jo">
+          </div>
+          <datalist id="item">
+            {% for value in all_item_code %}
+            <option value="{{value.item_code}}">{{value.item_code}} | {{value.item_name}} | {{value.item_description}} </option>
+            {% endfor %}
+          </datalist>
+            <div style="margin-left:20px;">
+                <button type="button" class="btn btn-info add-item-jo"><i class="fa fa-plus"></i>Insert Item</button>
+            </div>
+        </div>
+    </div>
+    <div class="table table-responsive">
+      <table class="table table-bordered" id="new-jo-table">
+          <thead>
+              <tr>
+                  <th width="40px" style="font-size:10px;">S No.</th>
+                  <th width="100px">Item Code</th>
+                  <th width="120px">Item Name</th>
+                  <th width="180px">Description</th>
+                  <th width="130px">Meas</th>
+                  <th width="80px">Width</th>
+                  <th width="80px">Height</th>
+                  <th width="80px">Qty</th>
+                  <th width="80px">Sq.ft</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+          <tbody>
+          </tbody>
+      </table>
+    </div>
+    </li>
+      <br>
+    <div class="text-center">
+      <button type="submit" class="btn btn-outline-primary has_id">Submit <small>(Job Order)</small></button>
+    </div>
+    <br>
+</form>
+</ul>
+</div>
+
+
+{% endblock body %}
