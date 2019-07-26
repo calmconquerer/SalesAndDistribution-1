@@ -744,11 +744,7 @@ line-height: 13px;
 margin-right: 4px;
 }
 
-.table-title .add-item-jv i {
-margin-right: 4px;
-}
-
-.table-title .load-invoices {
+.table-title .load-invoices-cpv {
 float: right;
 height: 30px;
 font-weight: bold;
@@ -758,9 +754,14 @@ min-width: 100px;
 border-radius: 50px;
 line-height: 13px;
 }
-.table-title .load-invoices i {
+.table-title .load-invoices-cpv i {
 margin-right: 4px;
 }
+
+.table-title .add-item-jv i {
+margin-right: 4px;
+}
+
 
 .table-title .add-item-jv i {
 margin-right: 4px;

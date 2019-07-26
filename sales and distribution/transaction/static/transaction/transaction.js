@@ -252,6 +252,7 @@ $(document).ready(function(){
 	 	 							'width' : "",
 	 	 							'height' : "",
 	 	 							'quantity' : "",
+									'sqft': "",
 	 	 							'rate' : "",
 	 	 							'total': "",
 	 	 							'measurment' : "",
@@ -269,6 +270,10 @@ $(document).ready(function(){
 	 	 							else if (i === 7) {
 	 	 									row["quantity"] = ($(this).text());
 	 	 							}
+									else if (i === 8) {
+											row["sqft"] = ($(this).text());
+											console.log();
+									}
 	 	 							else if (i === 9) {
 	 	 									row["rate"] = ($(this).text());
 	 	 							}
@@ -523,6 +528,7 @@ $(document).on("click", ".edit-purchase-edit", function(){
 					'width' : "",
 					'height' : "",
 					'quantity' : "",
+					'sqft': "",
 					'rate' : "",
 					'total': "",
 					'measurment' : "",
@@ -539,6 +545,9 @@ $(document).on("click", ".edit-purchase-edit", function(){
 					}
 					else if (i === 8) {
 							row["quantity"] = ($(this).text());
+					}
+					else if (i === 9) {
+							row["sqft"] = ($(this).text());
 					}
 					else if (i === 10) {
 							row["rate"] = ($(this).text());
@@ -815,6 +824,7 @@ $('#edit-purchase-return-submit').on('submit',function(e){
 					'width' : "",
 					'height' : "",
 					'quantity' : "",
+					'sqft': "",
 					'rate' : "",
 					'total': "",
 					'measurment' : "",
@@ -832,6 +842,9 @@ $('#edit-purchase-return-submit').on('submit',function(e){
 					}
 					else if (i === 7) {
 							row["quantity"] = ($(this).text());
+					}
+					else if (i === 8) {
+							row["sqft"] = ($(this).text());
 					}
 					else if (i === 9) {
 							row["rate"] = ($(this).text());
@@ -1054,6 +1067,7 @@ $('#edit-purchase-return-submit').on('submit',function(e){
 					'width' : "",
 					'height' : "",
 					'quantity' : "",
+					'sqft': "",
 					'rate' : "",
 					'total': "",
 					'measurment' : "",
@@ -1073,6 +1087,10 @@ $('#edit-purchase-return-submit').on('submit',function(e){
 					}
 					else if (i === 7) {
 							row["quantity"] = ($(this).text());
+							console.log($(this).text());
+					}
+					else if (i === 8) {
+							row["sqft"] = ($(this).text());
 							console.log($(this).text());
 					}
 					else if (i === 9) {
@@ -2859,78 +2877,6 @@ $('#tree1').treed();
 				$(".add-item-cpv").removeAttr("disabled");
 			});
 
-
-
-				$('#new-jv-form-cpv').on('submit',function(e){
-					e.preventDefault();
-					var table = $('#new-cpv-table');
-					var data = [];
-					var debit = 0;
-					var credit = 0;
-					var doc_no = $('#doc_no').val();
-					var doc_date = $('#doc_date').val()
-					var cheque_no = $('#cheque_no').val();;
-					var cheque_date = $('#cheque_date').val();
-					var description = $('#description').val();
-
-					table.find('tr').each(function (i, el){
-						if(i != 0)
-						{
-							var $tds = $(this).find('td');
-							var row = {
-								'account_id' : "",
-								'account_title' : "",
-								'debit' : "",
-								'credit' : "",
-							};
-							$tds.each(function(i, el){
-								if (i === 0) {
-										row["account_id"] = ($(this).text());
-								}
-								if (i === 1) {
-										row["account_title"] = ($(this).text());
-								}
-								else if (i === 2) {
-										row["debit"] = ($(this).text());
-										debit = debit + parseFloat(($(this).text()));
-								}
-								else if (i === 3) {
-										row["credit"] = ($(this).text());
-										credit = credit + parseFloat(($(this).text()));
-								}
-							});
-							data.push(row);
-						}
-					});
-					if (debit == credit) {
-						req =	$.ajax({
-							 headers: { "X-CSRFToken": getCookie("csrftoken") },
-							 type: 'POST',
-							 data:{
-								 'doc_no': doc_no,
-								 'doc_date': doc_date,
-								 'cheque_no': cheque_no,
-								 'cheque_date': cheque_date,
-								 'description': description,
-								 'items': JSON.stringify(data),
-							 },
-							 dataType: 'json'
-						 })
-						 .done(function done(data){
-							 if (data.result != "success") {
-								 alert(data.result)
-							 }
-							 else {
-								 alert("Voucher Submitted");
-								 location.reload();
-							 }
-						 })
-					}
-					else {
-						alert("Debit and Credit sides are not same");
-					}
-
-				});
 				var check = 0;
 				$(':checkbox').click(function(){
 				   $('#invoice_no:text').attr('disabled',!this.checked)
@@ -3067,6 +3013,140 @@ $('#tree1').treed();
 
 
 					});
+
+
+
+					$(".load-invoices-cpv").click(function(){
+						var invoice_no = $('#invoice_no').val()
+						console.log(invoice_no);
+						if($('#box').prop("checked") == true){
+								var check = 1;
+						}
+						else{
+								check = 0
+						}
+						var account_title = $('#account_title').find(":selected").text();
+
+						req =	$.ajax({
+							 headers: { "X-CSRFToken": getCookie("csrftoken") },
+							 type: 'POST',
+							 data:{
+								 'check':check,
+								 'invoice_no': invoice_no,
+								 'account_title': account_title,
+							 },
+							 dataType: 'json'
+						 })
+						 .done(function done(data){
+							 var balance_amount = 0;
+							 var parent_amount = $('#amount').val();
+							 console.log(data.pi);
+								 var index = $("table tbody tr:last-child").index();
+								 for (var i = 0; i < data.pi.length; i++) {
+									 b_amount = parseFloat(data.pi[i][4]) + parseFloat(data.pi[i][5])
+									 if (parent_amount > 0) {
+										 is_abs = parent_amount - parseFloat(b_amount)
+											if (parent_amount > parseFloat(b_amount)){
+												balance_amount = 0.00 ;
+											}
+											else{
+												parent_amount = parent_amount - parseFloat(b_amount)
+												balance_amount = Math.abs(parent_amount)
+											}
+										 var row = '<tr>' +
+												 '<td>6</td>' +
+												 '<td>Cash</td>' +
+												 '<td>'+data.pi[i][2]+'</td>' +
+												 '<td>0.00</td>' +
+												 '<td>'+b_amount.toFixed(2)+'</td>' +
+												 '<td>'+balance_amount.toFixed(2)+'</td>' +
+									 // '<td><a class="add-jv" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a><a class="edit-jv" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a><a class="delete-jv" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>' +
+										 '</tr>';
+									 $("table").append(row);
+								 $("table tbody tr").eq(index + 1).find(".add-jv, .edit-jv").toggle();
+										 $('[data-toggle="tooltip"]').tooltip();
+											parent_amount = parent_amount - parseFloat(b_amount)
+									 }
+								 }
+								 $(".load-invoices-cpv").attr("disabled", "disabled");
+						 })
+					});
+
+					$('#new-jv-form-cpv').on('submit',function(e){
+							e.preventDefault();
+							var account_id = 0
+							var table = $('#new-cpv-table');
+							var data = [];
+							var debit = 0;
+							var credit = 0;
+							var invoice_no = $('#invoice_no').val();
+							var doc_date = $('#doc_date').val();
+							var date = $('#date').val();
+							var vendor = $('#account_title').find(":selected").text();
+							var description = $('#description').val();
+
+							table.find('tr').each(function (i, el){
+								if(i != 0)
+								{
+									var $tds = $(this).find('td');
+									var row = {
+										'account_id' : "",
+										'account_title' : "",
+										'invoice_no' : "",
+										'debit' : "",
+										'credit' : "",
+										'balance' : "",
+									};
+									$tds.each(function(i, el){
+										if (i === 0) {
+												row["account_id"] = ($(this).text());
+										}
+										if (i === 1) {
+												row["account_title"] = ($(this).text());
+										}
+										else if (i === 2) {
+												row["invoice_no"] = ($(this).text());
+												debit = debit + parseFloat(($(this).text()));
+										}
+										else if (i === 3) {
+												row["debit"] = ($(this).text());
+												debit = debit + parseFloat(($(this).text()));
+										}
+										else if (i === 4) {
+												row["credit"] = ($(this).text());
+												credit = credit + parseFloat(($(this).text()));
+										}
+										else if (i === 5) {
+												row["balance"] = ($(this).text());
+												credit = credit + parseFloat(($(this).text()));
+										}
+									});
+									data.push(row);
+								}
+							});
+
+								req =	$.ajax({
+									 headers: { "X-CSRFToken": getCookie("csrftoken") },
+									 type: 'POST',
+									 url : '/transaction/cash_payment_voucher/new/',
+									 data:{
+										 'account_id':account_id,
+										 'invoice_no': invoice_no,
+										 'doc_date': doc_date,
+										 'description': description,
+										 'date':date,
+										 'vendor':vendor,
+										 'items': JSON.stringify(data),
+									 },
+									 dataType: 'json'
+								 })
+								 .done(function done(data){
+									 alert("CP Voucher Submitted");
+									 location.reload();
+								 })
+
+
+						});
 
 
 				// Add row on add button click

@@ -25,6 +25,7 @@ class PurchaseHeader(models.Model):
     follow_up = models.DateField(default = datetime.date.today)
     payment_method = models.CharField(max_length = 100)
     account_id = models.ForeignKey(ChartOfAccount, models.SET_NULL, blank=True, null=True,)
+    user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
 
 
 class PurchaseReturnHeader(models.Model):
@@ -59,6 +60,7 @@ class PurchaseDetail(models.Model):
     purchase_id = models.ForeignKey(PurchaseHeader, on_delete = models.CASCADE)
 
 
+
 class SaleHeader(models.Model):
     sale_no = models.CharField(max_length = 100, unique = True)
     date = models.DateField(default = datetime.date.today)
@@ -67,7 +69,8 @@ class SaleHeader(models.Model):
     follow_up = models.DateField(default = datetime.date.today)
     payment_method = models.CharField(max_length = 100)
     account_holder = models.CharField(max_length = 100)
-    account_id = models.ForeignKey(ChartOfAccount, models.SET_NULL,blank=True,null=True,)
+    account_id = models.ForeignKey(ChartOfAccount, models.SET_NULL,blank=True,null=True)
+    user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
 
 
 class SaleDetail(models.Model):
@@ -127,7 +130,7 @@ class VoucherDetail(models.Model):
     account_id = models.ForeignKey(ChartOfAccount, models.SET_NULL,blank=True,null=True)
     debit = models.DecimalField(max_digits = 8, decimal_places = 2)
     credit = models.DecimalField(max_digits = 8, decimal_places = 2)
-    invoice_id = models.ForeignKey(SaleHeader, models.SET_NULL, blank=True,null=True)
+    invoice_id = models.IntegerField()
     header_id = models.ForeignKey(VoucherHeader, models.SET_NULL,blank=True,null=True)
 
 class Transactions(models.Model):

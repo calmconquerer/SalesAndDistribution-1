@@ -13,6 +13,7 @@ urlpatterns = [
     path('purchase_return/new', views.new_purchase_return, name='new-purchase-return'),
     path('purchase/print/<pk>', views.print_purchase, name='purchase-print'),
     path('purchase/edit/<int:pk>', views.edit_purchase, name='edit-purchase'),
+    path('purchase/delete/<pk>', views.delete_purchase, name='delete-purchase'),
 
     path('sale/', views.sale, name='sale'),
     path('sale/new/', views.new_sale, name='new-sale'),
@@ -43,8 +44,8 @@ urlpatterns = [
 
     path('cash_payment_voucher', views.cash_payment_voucher, name='cash-payment-voucher'),
     path('cash_payment_voucher/new/', views.new_cash_payment_voucher, name='new-cash-payment-voucher'),
-    path('cash_payment_voucher/edit/<pk>', views.edit_cash_payment, name='edit-cash-payment'),
-
+    path('cash_payment_voucher/view/<pk>', views.view_cash_payment, name='view-cash-payment'),
+    path('cash_payment_voucher/delete/<pk>', views.delete_cash_payment, name='delete-cash-payment'),
 
     path('job_order/', views.job_order, name='job-order'),
     path('job_order/new/', views.new_job_order, name='new-job-order'),

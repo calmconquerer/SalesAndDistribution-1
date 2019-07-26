@@ -7,7 +7,7 @@
   <h4>Cash Payment Voucher</h4>
 </div>
 <ul class="list-group list-group-flush">
-<form  action="" id="new-jv-form-crv" autocomplete="off"  method="post">
+<form  action="" id="new-jv-form-cpv" autocomplete="off"  method="post">
   {% csrf_token %}
   <li class="list-group-item">
       <div class="form-row">
@@ -38,17 +38,22 @@
                 {% endfor %}
               </select>
             </div>
-              <div class="form-group col-md-2">
-                <input type="checkbox" name="check" id="box" class="check" >
-                <label for="">Invoice #</label>
-                <input type="text" id="invoice_no" class="form-control form-control-sm" disabled/>
-              </div>
+            <div class="form-group col-md-2">
+              <input type="checkbox" name="check" id="box" class="check" >
+              <label for="">Invoice #</label>
+              <input type="text" list="inv_no" id="invoice_no" class="form-control form-control-sm" disabled/>
+              <datalist class="" id="inv_no">
+                {% for v in all_invoices %}
+                  <option value="{{v.purchase_no}}">{{v.purchase_no}}</option>
+                {% endfor %}
+              </datalist>
+            </div>
               <div class="form-group col-md-2">
                 <label for="">Amount</label>
                 <input type="text" id="amount" class="form-control form-control-sm"/>
               </div>
               <div class="form-group col-md-2">
-                <button type="button" style="margin-top:30px;" class="btn btn-info load-invoices"><i class="fa fa-plus"></i>Load Invoices</button>
+                <button type="button" style="margin-top:30px;" class="btn btn-info load-invoices-cpv"><i class="fa fa-plus"></i>Load Invoices</button>
               </div>
           </div>
       </div>
@@ -73,7 +78,7 @@
     </li>
       <br>
     <div class="text-center">
-      <button type="submit" class="btn btn-outline-primary">Submit <small>(CR Voucher)</small></button>
+      <button type="submit" class="btn btn-outline-primary">Submit <small>(CP Voucher)</small></button>
     </div>
     <br>
 </form>
